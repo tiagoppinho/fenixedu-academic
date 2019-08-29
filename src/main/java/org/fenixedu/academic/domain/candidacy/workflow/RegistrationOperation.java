@@ -70,6 +70,10 @@ public class RegistrationOperation extends CandidacyOperation {
         //assignMeasurementTestShift(registration);
         Signal.emit("academic.candidacy.registration.created", new RegistrationCreatedByCandidacy(registration,
                 getStudentCandidacy()));
+
+        // Test emit santander card to a new student
+        // Remove before PR.
+        Signal.emit(Registration.REGISTRATION_PROCESS_COMPLETE, registration);
     }
 
     protected void associateShiftsFor(final Registration registration) {

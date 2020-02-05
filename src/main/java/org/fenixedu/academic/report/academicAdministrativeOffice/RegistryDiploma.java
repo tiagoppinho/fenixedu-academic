@@ -108,7 +108,7 @@ public class RegistryDiploma extends AdministrativeOfficeDocument {
         }
 
         getPayload().addProperty("conclusionDate", getFormattedDate(getDocumentRequest().getConclusionDate()));
-        getPayload().addProperty("graduateTitle", getDocumentRequest().getGraduateTitle(getLocale()));
+        getPayload().addProperty("graduateTitle", getGraduateTile());
         getPayload().addProperty("isUTL", isUTL());
 
         if (!(getDocumentRequest() instanceof PhdRegistryDiplomaRequest)) {
@@ -144,7 +144,7 @@ public class RegistryDiploma extends AdministrativeOfficeDocument {
         }
 
         result.add(BundleUtil.getString(Bundle.ACADEMIC, getLocale(), "label.in"));
-        result.add(getDocumentRequest().getDegreeName(year));
+        result.add(getDocumentRequest().getDegreeName(year, getLocale()));
 
         return Joiner.on(" ").join(result);
     }
@@ -185,6 +185,17 @@ public class RegistryDiploma extends AdministrativeOfficeDocument {
 
     protected String getQualification() {
         return BundleUtil.getString(Bundle.ACADEMIC, getLocale(), getDocumentRequest().getQualifiedAverageGrade(getLocale()));
+    }
+
+    private String getGraduateTile() {
+        final DegreeType degreeType = getDocumentRequest().getDegree().getDegreeType();
+        final CycleType cycleType = getDocumentRequest().getRequestedCycle();
+
+        if (degreeType.isIntegratedMasterDegree() && cycleType.equals(CycleType.SECOND_CYCLE)) {
+            return getDocumentRequest().getGraduateTitle(LocaleUtils.PT);
+        }
+
+        return getDocumentRequest().getGraduateTitle(getLocale());
     }
 
 }
